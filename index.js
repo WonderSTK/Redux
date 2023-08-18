@@ -19,7 +19,9 @@ function reducer(state={amount:1}, action){
 //     history.push(store.getState());
 //     console.log(history);
 // })
-
+function constant(){
+    console.log('file changed')
+}
 function increment(){
     return {type:'increment'}
 }
