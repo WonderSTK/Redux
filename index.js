@@ -1,15 +1,22 @@
 import { createStore, applyMiddleware } from "redux";
 import logger from "redux-logger";
+
+const inc = 'increment';
+const dec = 'decrement';
+const incByAmt = 'incrementByAmount';
+
 const store = createStore(reducer, applyMiddleware(logger.default));
 const history = [];
+
+
 function reducer(state={amount:1}, action){
-    if(action.type=== 'increment'){
+    if(action.type === inc){
         return {amount: state.amount+1};
     }
-    if(action.type=== 'decrement'){
+    if(action.type === dec){
         return {amount: state.amount-1};
     }
-    if(action.type=== 'incrementByNum'){
+    if(action.type=== incByAmt ){
         return {amount: state.amount+action.payload};
     }
     return state;
@@ -19,21 +26,19 @@ function reducer(state={amount:1}, action){
 //     history.push(store.getState());
 //     console.log(history);
 // })
-function constant(){
-    console.log('file changed')
-}
+
 function increment(){
-    return {type:'increment'}
+    return {type: inc}
 }
 function decrement(){
-    return {type:'decrement'}
+    return {type: dec}
 }
-function incrementByNum(value){
-    return {type:'incrementByNum', payload:value}
+function incrementByAmount(value){
+    return {type: incByAmt, payload:value}
 }
 
 setInterval(()=>{
-    store.dispatch(incrementByNum(5));
+    store.dispatch(incrementByAmount(5));
 
 },2000);
 
