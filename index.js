@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
 import logger from "redux-logger";
-
+import axios from "axios";
 const inc = 'increment';
 const dec = 'decrement';
 const incByAmt = 'incrementByAmount';
@@ -26,7 +26,9 @@ function reducer(state={amount:1}, action){
 //     history.push(store.getState());
 //     console.log(history);
 // })
-
+function initUser(){
+    return {type: init}
+}
 function increment(){
     return {type: inc}
 }
