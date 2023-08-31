@@ -2,5 +2,9 @@
     "accounts": [
         {"id":1, "amount":100},
         {"id":2, "amount":200}
+    ],
+    "Bonus": [
+        {"id":1, "points":3},
+        {"id":2, "points":2}
     ]
 }

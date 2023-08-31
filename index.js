@@ -12,7 +12,7 @@ const store = createStore(reducer, applyMiddleware(logger.default, thunk.default
 const history = [];
 
 
-function reducer(state={amount:1}, action){
+function accountReducer(state={amount:1}, action){
     switch(action.type) {
         case init:
             return {amount: action.payload};
@@ -28,6 +28,14 @@ function reducer(state={amount:1}, action){
     
 }
 
+function bonusReducer(state={points:0}, action){
+    switch(action.type) {
+        case inc:
+            return {points: state.points+1};
+           
+    }
+
+}
 // store.subscribe(()=>{
 //     history.push(store.getState());
 //     console.log(history);
