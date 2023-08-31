@@ -1,33 +1,54 @@
 import { createStore, applyMiddleware } from "redux";
 import logger from "redux-logger";
 import axios from "axios";
+import thunk from "redux-thunk";
+
+const init = 'init';
 const inc = 'increment';
 const dec = 'decrement';
 const incByAmt = 'incrementByAmount';
 
-const store = createStore(reducer, applyMiddleware(logger.default));
+const store = createStore(reducer, applyMiddleware(logger.default, thunk.default));
 const history = [];
 
 
 function reducer(state={amount:1}, action){
-    if(action.type === inc){
-        return {amount: state.amount+1};
+    switch(action.type) {
+        case init:
+            return {amount: action.payload};
+        case inc:
+            return {amount: state.amount+1};
+        case dec:
+            return {amount: state.amount-1};  
+        case incByAmt:
+            return {amount: state.amount+action.payload};   
+        default:
+            return state;       
     }
-    if(action.type === dec){
-        return {amount: state.amount-1};
-    }
-    if(action.type=== incByAmt ){
-        return {amount: state.amount+action.payload};
-    }
-    return state;
+    
 }
 
 // store.subscribe(()=>{
 //     history.push(store.getState());
 //     console.log(history);
 // })
-function initUser(){
-    return {type: init}
+// Async API call
+
+// async function getUser(){
+//     const {data} = await axios.get('http://localhost:3000/accounts/1')
+//     console.log(data)
+// }
+// getUser() 
+
+
+function getUser(id){
+    return async(dispatch, getState)=>{
+        const {data} = await axios.get(`http://localhost:3000/accounts/${id}`)
+        dispatch({type: init, payload:data.amount})
+    }
+}
+function initUser(value){
+    return {type: init, payload:value}
 }
 function increment(){
     return {type: inc}
@@ -39,8 +60,8 @@ function incrementByAmount(value){
     return {type: incByAmt, payload:value}
 }
 
-setInterval(()=>{
-    store.dispatch(incrementByAmount(5));
+setTimeout(()=>{
+    store.dispatch(getUser(2));
 
 },2000);
 
