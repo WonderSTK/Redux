@@ -60,7 +60,7 @@ function bonusReducer(state={points:0}, action){
 // getUser() 
 
 
-function getUser(id){
+function getUserAccount(id){
     return async(dispatch, getState)=>{
         const {data} = await axios.get(`http://localhost:3000/accounts/${id}`)
         dispatch({type: init, payload:data.amount})
@@ -83,7 +83,9 @@ function incrementBonus(value){
 }
 
 setTimeout(()=>{
-    store.dispatch(incrementBonus(20));
+    store.dispatch(getUserAccount(2));
+    // store.dispatch(incrementByAmount(200));
+    // store.dispatch(incrementBonus(20));
 
 },2000);
 
