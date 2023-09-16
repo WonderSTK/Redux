@@ -8,7 +8,7 @@ const inc = 'accounts/increment';
 const dec = 'accounts/decrement';
 const incByAmt = 'accounts/incrementByAmount';
 const getAccUserPending = 'account/getUser/pending';
-const getAccUserFulfilled = 'account/getUser/fulfilled';
+const getAccUserFulFilled = 'account/getUser/fulfilled';
 const getAccUserRejected = 'account/getUser/rejected';
 const incBonus = 'bonus/increment';
 
@@ -23,12 +23,12 @@ const history = [];
 
 function accountReducer(state={amount:1}, action){
     switch(action.type) {
-        case getAccUserFulfilled:
-            return {amount: action.payload};
+        case getAccUserFulFilled:
+            return {amount: action.payload, pending:false};
         case getAccUserPending:
-            return {amount: action.payload};
+            return {...state, pending:true};
         case getAccUserRejected:
-            return {...state, error: action.error};    
+            return {...state, error: action.error, pending:false};    
         case inc:
             return {amount: state.amount+1};
         case dec:
@@ -70,18 +70,19 @@ function bonusReducer(state={points:0}, action){
 function getUserAccount(id){
     return async(dispatch, getState)=>{
         try{
-            const {data} = await axios.get(`http://localhost:3000/account/${id}`)
-            dispatch(getAccountUserFulfilled(data.amount));
+            dispatch(getAccountUserPending());
+            const {data} = await axios.get(`http://localhost:3000/accounts/${id}`)
+            dispatch(getAccountUserFulFilled(data.amount));
         } catch(error){
             dispatch(getAccountUserRejected(error.message));
         }
     }
 }
-function getAccountUserFulfilled(value){
-    return {type: getAccUserFulfilled, payload:value}
+function getAccountUserFulFilled(value){
+    return {type: getAccUserFulFilled, payload:value}
 }
-function getAccountUserPending(value){
-    return {type: getAccUserPending, payload:value}
+function getAccountUserPending(){
+    return {type: getAccUserPending}
 }
 function getAccountUserRejected(error){
     return {type: getAccUserRejected, error: error}
